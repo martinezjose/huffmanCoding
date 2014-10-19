@@ -1,0 +1,4 @@
+compress
+uncompress
+build/
+*.swp
