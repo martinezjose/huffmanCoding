@@ -5,8 +5,8 @@
 #include <vector>
 #include <fstream>
 #include "HCNode.hpp"
-#include "BitInputStream.hpp"
-#include "BitOutputStream.hpp"
+//#include "BitInputStream.hpp"
+//#include "BitOutputStream.hpp"
 
 using namespace std;
 
@@ -33,7 +33,7 @@ private:
 
 public:
     explicit HCTree() : root(0) {
-        leaves = vector<HCNode*>(256, (HCNode*) 0);
+      leaves = vector<HCNode*>(256, (HCNode*) 0);
     }
 
     ~HCTree();
