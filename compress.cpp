@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
 
   ifstream inFile;
   int nextChar;
-  inFile.open("input_files/lotsofA");
+  inFile.open("input_files/test");
   while(1){
     nextChar = inFile.get();
     freqs[nextChar]++;
@@ -22,13 +22,21 @@ int main(int argc, char** argv) {
   }
 
   tree->build(freqs);
-  ifstream.seekg(0, ios::beg);
+  inFile.clear();
+  inFile.seekg(0, ios::beg);
   ofstream outFile;
   
   outFile.open("test.txt");
-  tree->encode()
-
+  while(1){
+    int n = inFile.get();
+    cout << (char) n << endl; 
+    tree->encode(n, outFile);
+    if(inFile.eof()){
+      break;
+    }
+  }
   inFile.close();
+  outFile.close();
   /** Consider using this way of constructing the leaves vector!!
   if (tree->leaves[byte] == nullptr) {
     tree->leaves[byte] = new HCNode();

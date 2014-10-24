@@ -64,13 +64,13 @@ void HCTree::build(const vector<int>& freqs) {
 
 void traverse(HCNode* n, ofstream& out) {
 
-  if (!n) {
+  if (n == NULL) {
     return;
   }
 
-  traverse(n,out);
+  traverse(n->p,out);
 
-  if(n->p) {
+  if(n->p != NULL) {
     
     if(n->p->c0 == n) {
       /*Write 0*/
