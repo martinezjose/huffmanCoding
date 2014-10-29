@@ -16,13 +16,12 @@ int main(int argc, char** argv) {
     return -1;
   }
 
-  /** Check that we can open both files **/
   /** Input and output streams**/
   ifstream inFile;
   ofstream outFile;
 
   /** Try opening input file **/
-  inFile.open(argv[1]);
+  inFile.open(argv[1], std::ifstream::binary);
 
   /** Check for errors **/
   if (inFile.fail()) {
@@ -31,7 +30,7 @@ int main(int argc, char** argv) {
   }
 
   /** Try opening output file **/
-  outFile.open(argv[2]);
+  outFile.open(argv[2], std::ofstream::binary);
 
   /** Check for errors **/
   if (outFile.fail()) {
@@ -40,44 +39,42 @@ int main(int argc, char** argv) {
   }
 
   /** Create tree **/
-  HCTree* tree = new HCTree();
+  HCTree tree = HCTree();
 
   /** Create frequencies vector **/
   vector<int> freqs = vector<int>(256, 0);
 
   /** Get frequencies **/
-  int nextChar;
-  while(1){
-    nextChar = (char)inFile.get();
-    freqs[nextChar]++;
-    if(inFile.eof()){
-      break;
-    }
-  }
-
-  /** Write header **/
+  int frequency;
+  long frequenciesTotal = 0;
   for (uint i = 0; i < freqs.size(); i++) {
-    outFile << freqs[i] << endl;
+    inFile >> frequency;
+    freqs[i] = frequency;
+    /** Accumulate frequencies **/
+    frequenciesTotal += frequency;
   }
 
   /** Build tree **/
-  tree->build(freqs);
+  tree.build(freqs);
 
-  /** Rewind input file **/
-  inFile.clear();
-  inFile.seekg(0, ios::beg);
-  while (1) {
-    int n = inFile.get();
-    cout << (char) n << endl;
-    /** Encode every character to the output file **/
-    tree->encode(n, outFile);
-    if (inFile.eof()) {
+  /** While the total count of symbols is > 0 **/
+  while (frequenciesTotal > 0) {
+    /** Decode next symbol in file **/
+    int symbol = tree.decode(inFile);
+
+    /** If we are at the end of the file or we got the stopping condition **/
+    if (inFile.eof() || symbol < 0) {
       break;
     }
+
+    /** Write to output **/
+    outFile.put(symbol);
+
+    /** Decrement frequencies **/
+    frequenciesTotal--;
   }
 
   /** Close both file streams **/
   inFile.close();
   outFile.close();
-
 }

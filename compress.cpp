@@ -16,13 +16,12 @@ int main(int argc, char** argv) {
     return -1;
   }
 
-  /** Check that we can open both files **/
   /** Input and output streams**/
   ifstream inFile;
   ofstream outFile;
 
   /** Try opening input file **/
-  inFile.open(argv[1]);
+  inFile.open(argv[1], std::ifstream::binary);
 
   /** Check for errors **/
   if (inFile.fail()) {
@@ -31,7 +30,7 @@ int main(int argc, char** argv) {
   }
 
   /** Try opening output file **/
-  outFile.open(argv[2]);
+  outFile.open(argv[2], std::ofstream::binary);
 
   /** Check for errors **/
   if (outFile.fail()) {
@@ -40,19 +39,23 @@ int main(int argc, char** argv) {
   }
 
   /** Create tree **/
-  HCTree* tree = new HCTree();
+  HCTree tree = HCTree();
 
   /** Create frequencies vector **/
   vector<int> freqs = vector<int>(256, 0);
 
+  /** Declare symbol variable **/
+  int symbol;
+
   /** Get frequencies **/
-  int nextChar;
-  while(1){
-    nextChar = (char)inFile.get();
-    freqs[nextChar]++;
-    if(inFile.eof()){
+  while (1) {
+    /** Read character **/
+    int symbol = inFile.get();
+    if (inFile.eof()) {
       break;
     }
+    /** Increment frequency **/
+    freqs[symbol]++;
   }
 
   /** Write header **/
@@ -61,23 +64,22 @@ int main(int argc, char** argv) {
   }
 
   /** Build tree **/
-  tree->build(freqs);
+  tree.build(freqs);
 
   /** Rewind input file **/
   inFile.clear();
   inFile.seekg(0, ios::beg);
   while (1) {
-    int n = inFile.get();
-    cout << (char) n << endl;
-    /** Encode every character to the output file **/
-    tree->encode(n, outFile);
+    /** Read character **/
+    symbol = inFile.get();
     if (inFile.eof()) {
       break;
     }
+    /** Encode character to the output file **/
+    tree.encode(symbol, outFile);
   }
 
   /** Close both file streams **/
   inFile.close();
   outFile.close();
-
 }

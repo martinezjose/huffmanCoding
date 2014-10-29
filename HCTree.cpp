@@ -1,8 +1,5 @@
 #include "HCTree.hpp"
 
-/** TODO: Remove this using with all the couts **/
-using namespace std;
-
 /** Helper method to destruct the tree. It uses recursivity. **/
 void clear(HCNode* node) {
 
@@ -22,17 +19,20 @@ void clear(HCNode* node) {
 }
 
 /** Helper method to traverse from a leave to the root. **/
-void traverse(HCNode* n, ofstream& out) {
+void traverse(HCNode* node, ofstream& out) {
 
-  if (n == NULL) {
+  if (node == nullptr) {
     return;
   }
 
-  traverse(n->p,out);
+  /** Go to the parent **/
+  traverse(node->p,out);
 
-  if (n->p != NULL) {
+  /** If we aren't on the root **/
+  if (node->p != nullptr) {
 
-    if (n->p->c0 == n) {
+    /** If the node it's the left child of the parent **/
+    if (node->p->c0 == node) {
       /*Write 0*/
       out.put('0');
     } else {
@@ -42,11 +42,10 @@ void traverse(HCNode* n, ofstream& out) {
   }
 }
 
-/** Destructor  **/
+/** Destructor.  **/
 HCTree::~HCTree() {
   clear(root);
   root = nullptr;
-  delete this;
 }
 
 /** Use the Huffman algorithm to build a Huffman coding trie.
@@ -60,41 +59,43 @@ void HCTree::build(const vector<int>& freqs) {
   /** Create a forest of single-node trees containing symbols and counts for
    *  each non-zero-count symbol **/
   std::priority_queue<HCNode*,std::vector<HCNode*>,HCNodePtrComp> forest;
-  int alloc = 0;
 
   for (uint symbol = 0; symbol < freqs.size(); ++symbol) {
+    /** Get count **/
     int count = freqs[symbol];
+
+    /** If count is different than 0, create new node **/
     if (count != 0) {
-      cout << "Symbol: " << (char)symbol << " added to the forest :)" << endl;
       HCNode* tree = new HCNode(count, symbol);
-      alloc++;
-      /** point leaves[symbol] to the leaf node containing byte i **/
+
+      /** Point leaves[symbol] to the leaf node containing byte i **/
       leaves[symbol] = tree;
+
+      /** Add tree to forest **/
       forest.push(tree);
     }
   }
 
   /** Loop while there is more than 1 tree in the forest **/
   while (forest.size() > 1) {
+
     /** Remove the two lowest count trees **/
     HCNode* c0 = forest.top();
     forest.pop();
     HCNode* c1 = forest.top();
     forest.pop();
+
     /** Combine these two trees into a new tree (summing their counts) **/
-    HCNode* p = new HCNode(c0->count+c1->count, c0->symbol,
-      c0, c1);
-    alloc++;
-    cout << "Symbols " << (char)c0->symbol << " and " << (char)c1->symbol <<
-    " are being merged, total count now is " <<
-    p->count << " and symbol is " << (char)p->symbol << endl;
+    HCNode* p = new HCNode(c0->count+c1->count, c0->symbol, c0, c1);
+
+    /** Set parent **/
     c0->p = p;
     c1->p = p;
+
     /** Insert this new tree in the forest **/
     forest.push(p);
   }
 
-  cout << "Allocations are: "<< alloc<< endl;
   root = forest.top();
 }
 
@@ -106,6 +107,7 @@ void HCTree::build(const vector<int>& freqs) {
  *  BE USED IN THE FINAL SUBMISSION.
  */
 void HCTree::encode(byte symbol, ofstream& out) const {
+
   traverse(leaves[symbol], out);
 }
 
@@ -118,15 +120,31 @@ void HCTree::encode(byte symbol, ofstream& out) const {
  *  IN THE FINAL SUBMISSION.
  */
 int HCTree::decode(ifstream& in) const {
+  /** Get root **/
   HCNode* node = root;
+
+  /**  If node is null, return stopping condition **/
+  if (node == nullptr) {
+    return -1;
+  }
+
+  /** Loop while we haven't reached a leave **/
   while (node->c0 != nullptr || node->c1 != nullptr) {
-    int b = in.get();
-    cout << "Read: " << b << " from file" << endl;
-    if (b == 48) {
-      cout << "Going left"<< endl;
+
+    /** Get symbol from file **/
+    int symbol = in.get();
+
+    /** If b is -1, return as stopping condition**/
+    if (symbol == -1) {
+      return symbol;
+    }
+
+    /** If we get a 0, go left **/
+    if (symbol == 48) {
       node = node->c0;
-    } else if (b == 49) {
-      cout << "Going right" << endl;
+
+      /** If we get a 1, go right **/
+    } else if (symbol == 49) {
       node = node->c1;
     }
   }
