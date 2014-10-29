@@ -6,19 +6,21 @@
 
 using namespace std;
 
-/** A class for writing bits (and chars and ints) to an ostream
- */
+/** A class for writing bits (and chars and ints) to an ostream. **/
 class BitOutputStream {
 
 private:
-  ostream& out;  // the ostream to delegate to
-  char buf;     // the buffer of bits
-  //  bitset<8> buf;     // the buffer of bits
-  int bufi;     // the bit buffer index
+  /** The ostream to delegate to. **/
+  ostream& out;
+  /** The buffer of bits. **/
+  char buf;
+  /** TODO bitset<8> buf; **/
+  /** The bit buffer index. **/
+  int bufi;
 
 public:
   BitOutputStream(ostream& s) : out(s), buf(0), bufi(0) { }
-  //  BitOutputStream(ostream& s) : out(s), bufi(0) { }
+  /** TODO BitOutputStream(ostream& s) : out(s), bufi(0) { } **/
 
   /** Write the least significant bit of the argument into
    *  the bit buffer, and increment the bit buffer index.
@@ -48,4 +50,4 @@ public:
   void flush();
 };
 
-#endif // BITOUTPUTSTREAM_HPP
+#endif /** BITOUTPUTSTREAM_HPP **/

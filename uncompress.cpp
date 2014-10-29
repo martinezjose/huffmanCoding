@@ -6,7 +6,7 @@
 
 using namespace std;
 
-/** Driver for compressing a file. **/
+/** Driver for decompressing a file. **/
 int main(int argc, char** argv) {
 
   /** Check that the parameter count is correct **/
