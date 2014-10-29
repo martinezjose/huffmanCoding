@@ -1,11 +1,11 @@
 # Kyle Barron-Kraus <kbarronk>
 
-BIN_NAMES = compress #uncompress
+BIN_NAMES = compress uncompress
 
 compress_SOURCES = compress.cpp HCTree.cpp HCNode.cpp \
-                   #BitInputStream.cpp BitOutputStream.cpp
-#uncompress_SOURCES = uncompress.cpp HCTree.cpp HCNode.cpp \
-                     #BitInputStream.cpp BitOutputStream.cpp
+                   BitInputStream.cpp BitOutputStream.cpp
+uncompress_SOURCES = uncompress.cpp HCTree.cpp HCNode.cpp \
+                     BitInputStream.cpp BitOutputStream.cpp
 
 CXX = g++
 CXX_FLAGS = -std=c++11 -Wall -Wextra -g -O2
