@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
   /** Write header **/
   cout << "Writing header to file \"" <<  argv[2] << "\"... ";
   int totalSymbols = 0;
-  int totalCount = 0;
+  long totalCount = 0;
   for (uint i = 0; i < freqs.size(); i++) {
     /** Increment symbol and freqs count **/
     if (freqs[i] > 0) {

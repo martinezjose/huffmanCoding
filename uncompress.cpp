@@ -57,6 +57,11 @@ int main(int argc, char** argv) {
   cout << "Reading header from file \"" << argv[1] << "\"... ";
   for (uint i = 0; i < freqs.size(); i++) {
     inFile >> frequency;
+    /** If we are at the end of the file **/
+    if (inFile.eof()) {
+      cout << "Error reading header in input file: Reached EOF." << endl;
+      return -1;
+    }
     freqs[i] = frequency;
     if (frequency > 0) {
       /** Accumulate frequencies **/
@@ -82,7 +87,10 @@ int main(int argc, char** argv) {
     int symbol = tree.decode(inFile);
 
     /** If we are at the end of the file or we got the stopping condition **/
-    if (inFile.eof() || symbol < 0) {
+    if (symbol == -1) {
+      cout << "Error decoding input file: Reached EOF." << endl;
+      return -1;
+    } else if (inFile.eof()) {
       break;
     }
 
