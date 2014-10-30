@@ -139,6 +139,10 @@ int HCTree::decode(ifstream& in) const {
 
     /** If b is -1, return as stopping condition**/
     if (symbol == -1) {
+      /** If we were trying to read for the first time **/
+      if (root == node) {
+        return -2;
+      }
       return symbol;
     }
 
