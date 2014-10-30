@@ -1,12 +1,28 @@
-PA2
+Homework:
+  PA2 - Huffman Encoding
 
-Out: Monday October 20, 2014
-Checkpoint Submission Due: Friday October 24, 2014 @ 11:00 PM
-Final Submission Due: Friday October 31, 2014 @ 11:00 PM
+Collaborators:
+  Jose A. Martinez - A11724680 - jam004@ucsd.edu
+  Fernando I. Jaime - A11643783 - fjaime@ucsd.edu
 
-Please read the Assignment Page carefully before starting.
+Out:
+  Monday October 20, 2014
+Checkpoint Submission Due:
+  Wednesday October 29, 2014 @ 11:00 PM
+Final Submission Due:
+  Monday November 3, 2014 @ 11:00 PM
 
-Important Note:
-Because you are not required to implement or use BitInputStream and BitOutputStream for the checkpoint, you will either need to remove all
-references to them from the provided files (by commenting them out) and edit the Makefile, or create "dummy" versions of these classes
-(with both header and implementation files) to get the code to compile.
+Style Guidelines:
+  1. Line width shouldn't be more than 80 characters.
+  2. Files should not contain tabs, or trailing whitespace.
+  3. The identation should be 2 spaces.
+  4. Every code block should be wrapped by braces:
+
+    if (condition) {
+      /** Code here **/
+    } else {
+      /** More code here **/
+    }
+
+    Notice the spaces between if and the opening parenthesis and the space
+    after the closing parenthesis. Also notice the spaces between the word else.
