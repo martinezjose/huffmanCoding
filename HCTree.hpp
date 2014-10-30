@@ -8,8 +8,6 @@
 #include "BitInputStream.hpp"
 #include "BitOutputStream.hpp"
 
-using namespace std;
-
 /** A 'function class' for use as the Compare class in a
  *  priority_queue<HCNode*>.
  *  For this to work, operator< must be defined to
@@ -79,4 +77,5 @@ public:
    */
   int decode(ifstream& in) const;
 };
+
 #endif /** HCTREE_HPP **/

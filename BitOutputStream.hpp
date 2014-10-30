@@ -4,8 +4,6 @@
 #include <iostream>
 #include <bitset>
 
-using namespace std;
-
 /** A class for writing bits (and chars and ints) to an ostream. **/
 class BitOutputStream {
 

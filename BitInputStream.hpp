@@ -4,8 +4,6 @@
 #include <iostream>
 #include <bitset>
 
-using namespace std;
-
 /** A class for reading bits (and ints) from an istream. **/
 class BitInputStream {
 

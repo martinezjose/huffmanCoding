@@ -11,8 +11,14 @@ int main(int argc, char** argv) {
 
   /** Check that the parameter count is correct **/
   if (argc != 3) {
-    cout << "Please provide the input file and output file as parameters."
-      << endl;
+    cout << "./uncompress called with incorrect arguments." << endl;
+    cout << "Usage: ./uncompress infile outfile" << endl;
+    return -1;
+  }
+
+  /** Check that the two files are not equal **/
+  if (strcmp(argv[1], argv[2]) == 0) {
+    cout << "infile and outfile must be different files." << endl;
     return -1;
   }
 
@@ -25,7 +31,7 @@ int main(int argc, char** argv) {
 
   /** Check for errors **/
   if (inFile.fail()) {
-    cerr << "Error opening input file: " << strerror(errno) << endl;
+    cerr << "Error opening input file: " << strerror(errno) << "." << endl;
     return -1;
   }
 
@@ -34,7 +40,7 @@ int main(int argc, char** argv) {
 
   /** Check for errors **/
   if (outFile.fail()) {
-    cerr << "Error opening output file: " << strerror(errno) << endl;
+    cerr << "Error opening output file: " << strerror(errno) << "." << endl;
     return -1;
   }
 
@@ -47,17 +53,30 @@ int main(int argc, char** argv) {
   /** Get frequencies **/
   int frequency;
   long frequenciesTotal = 0;
+  int uniqueSymbols = 0;
+  cout << "Reading header from file \"" << argv[1] << "\"... ";
   for (uint i = 0; i < freqs.size(); i++) {
     inFile >> frequency;
     freqs[i] = frequency;
-    /** Accumulate frequencies **/
-    frequenciesTotal += frequency;
+    if (frequency > 0) {
+      /** Accumulate frequencies **/
+      frequenciesTotal += frequency;
+      uniqueSymbols++;
+    }
   }
+  cout << "done." << endl;
+
+  /** Print found data information **/
+  cout << "Uncompressed file will have " << uniqueSymbols <<
+    " unique symbols and size " << frequenciesTotal << " bytes." << endl;
 
   /** Build tree **/
+  cout << "Building Huffman code tree... ";
   tree.build(freqs);
+  cout << "done." << endl;
 
   /** While the total count of symbols is > 0 **/
+  cout << "Writing to file \"" << argv[2] << "\"... ";
   while (frequenciesTotal > 0) {
     /** Decode next symbol in file **/
     int symbol = tree.decode(inFile);
@@ -73,6 +92,7 @@ int main(int argc, char** argv) {
     /** Decrement frequencies **/
     frequenciesTotal--;
   }
+  cout << "done." << endl;
 
   /** Close both file streams **/
   inFile.close();

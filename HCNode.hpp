@@ -3,9 +3,9 @@
 
 #include <iostream>
 
-typedef unsigned char byte;
-
 using namespace std;
+
+typedef unsigned char byte;
 
 /** A class, instances of which are nodes in an HCTree. **/
 class HCNode {

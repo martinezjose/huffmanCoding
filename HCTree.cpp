@@ -18,25 +18,25 @@ void clear(HCNode* node) {
   delete node;
 }
 
-/** Helper method to traverse from a leave to the root. **/
-void traverse(HCNode* node, ofstream& out) {
+/** Helper method to traverse from a leaf to the root. **/
+void traverseToRoot(HCNode* node, ofstream& out) {
 
   if (node == nullptr) {
     return;
   }
 
   /** Go to the parent **/
-  traverse(node->p,out);
+  traverseToRoot(node->p,out);
 
   /** If we aren't on the root **/
   if (node->p != nullptr) {
 
     /** If the node it's the left child of the parent **/
     if (node->p->c0 == node) {
-      /*Write 0*/
+      /** Write 0 **/
       out.put('0');
     } else {
-      /**Write 1*/
+      /** Write 1 **/
       out.put('1');
     }
   }
@@ -96,7 +96,10 @@ void HCTree::build(const vector<int>& freqs) {
     forest.push(p);
   }
 
-  root = forest.top();
+  /** If the forest has more than one tree, assign to root **/
+  if (forest.size() > 0) {
+    root = forest.top();
+  }
 }
 
 /** Write to the given ofstream
@@ -107,8 +110,7 @@ void HCTree::build(const vector<int>& freqs) {
  *  BE USED IN THE FINAL SUBMISSION.
  */
 void HCTree::encode(byte symbol, ofstream& out) const {
-
-  traverse(leaves[symbol], out);
+  traverseToRoot(leaves[symbol], out);
 }
 
 
@@ -120,15 +122,16 @@ void HCTree::encode(byte symbol, ofstream& out) const {
  *  IN THE FINAL SUBMISSION.
  */
 int HCTree::decode(ifstream& in) const {
-  /** Get root **/
-  HCNode* node = root;
 
-  /**  If node is null, return stopping condition **/
-  if (node == nullptr) {
+  /** If root is null, return stopping condition **/
+  if (root == nullptr) {
     return -1;
   }
 
-  /** Loop while we haven't reached a leave **/
+  /** Get root **/
+  HCNode* node = root;
+
+  /** Loop while we haven't reached a leaf **/
   while (node->c0 != nullptr || node->c1 != nullptr) {
 
     /** Get symbol from file **/

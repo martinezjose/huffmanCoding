@@ -1,6 +1,7 @@
 #ifdef BITINPUTSTREAM_HPP
 
-/** Read the next bit from the bit buffer.
+/** TODO
+ *  Read the next bit from the bit buffer.
  *  If the bit buffer is currently empty,
  *  fill the bit buffer by reading a char from the istream first.
  *  Return the bit read as the least signficant bit of an int.
@@ -12,7 +13,8 @@ int readBit() {
   return 0;
 }
 
-/** Read a byte from the ostream.
+/** TODO
+ *  Read a byte from the ostream.
  *  Return -1 on EOF.
  *  This function doesn't touch the bit buffer.
  *  The client has to manage interaction between reading bits
@@ -22,7 +24,8 @@ int readByte() {
   return 0;
 }
 
-/** Read a non-negative int from the ostream.
+/** TODO
+ *  Read a non-negative int from the ostream.
  *  Return -1 on EOF.
  *  This function doesn't touch the bit buffer.
  *  The client has to manage interaction between reading bits
@@ -31,4 +34,5 @@ int readByte() {
 int readInt() {
   return 0;
 }
+
 #endif
