@@ -1,4 +1,4 @@
-#ifdef BITOUTPUTSTREAM_HPP
+#include "BitOutputStream.hpp"
 
 /** DONE
  *  Write the least significant bit of the argument into
@@ -6,16 +6,22 @@
  *  Flush to the ostream first if the bit buffer is full.
  *  This must be consistent with BitInputStream::readBit().
  */
-void writeBit(int bit) {
+void BitOutputStream::writeBit(int bit) {
+
+  // get the least significant bit (0 or 1)
+  buf = bit & 1;
 
   // If bufi is 8, then buffer is full
-  if( bufi == 8 ){
+  if( bufi == 8 ) {
     flush();
-  }
+  } 
 
-  // bit will always be 0 or 1
-  buf[bufi] = bit;
-  bufi++:
+  // shift lsb to the left 7-bufi places 
+  // then you OR the lsb with 1 
+  buf |= 1 << (7-bufi);
+
+  // increase index
+  bufi++;
 
 }
 
@@ -24,9 +30,9 @@ void writeBit(int bit) {
  *  This function doesn't touch the bit buffer.
  *  The client has to manage interaction between writing bits
  *  and writing bytes.
- */
-void writeByte(int b) {
+void BitOutputStream::writeByte(int b) {
 }
+ */
 
 /** DONE 
  *  Write the argument to the ostream.
@@ -34,7 +40,7 @@ void writeByte(int b) {
  *  The client has to manage interaction between writing bits
  *  and writing ints.
  */
-void writeInt(int i) {
+void BitOutputStream::writeInt(int i) {
 
   // a simple write with the passed int
   out.write((char*)&i, sizeof(i)); 
@@ -42,11 +48,11 @@ void writeInt(int i) {
 }
 
 /** DONE
- *  If the bit buffer contains any bits, flush the bit buffer to the ostream,
+ *  If the bit buffer contains any bits, flush the bit buffer to the ostream
  *  clear the bit buffer, and set the bit buffer index to 0.
  *  Also flush the ostream itself.
  */
-void flush() {
+void BitOutputStream::flush() {
  
     out.put(buf);
     out.flush();
@@ -54,4 +60,3 @@ void flush() {
 
 }
 
-#endif

@@ -9,15 +9,15 @@ class BitOutputStream {
 
 private:
   /** The ostream to delegate to. **/
-  ostream& out;
+  std::ostream& out;
   /** The buffer of bits. **/
-  //char buf;
-  bitset<8> buf;
+  char buf;
+  //bitset<8> buf;
   /** The bit buffer index. **/
   int bufi;
 
 public:
-  BitOutputStream(ostream& s) : out(s), buf(0), bufi(0) { }
+  BitOutputStream(std::ostream& s) : out(s), buf(0), bufi(0) { }
   /** TODO BitOutputStream(ostream& s) : out(s), bufi(0) { } **/
 
   /** Write the least significant bit of the argument into

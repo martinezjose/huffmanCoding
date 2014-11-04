@@ -44,6 +44,9 @@ int main(int argc, char** argv) {
     return -1;
   }
 
+  /** create BitOutputStream object **/
+  BitOutputStream outStream(outFile);
+
   /** Create tree **/
   HCTree tree = HCTree();
 
@@ -80,8 +83,9 @@ int main(int argc, char** argv) {
     if (freqs[i] > 0) {
       totalSymbols++;
       totalCount += freqs[i];
-    }
-    outFile << freqs[i] << endl;
+    } // figure out how to print header 
+    outStream.writeInt(freqs[i]);
+    //outFile << freqs[i] << endl;
   }
   cout << "done." << endl;
 
@@ -95,8 +99,6 @@ int main(int argc, char** argv) {
   inFile.seekg(0, ios::beg);
   cout << "Writing to file \"" << argv[2] << "\"... ";
 
-  /** create BitOutputStream object **/
-  BitOutputStream outStream(outFile);
 
   while (1) {
     /** Read character **/

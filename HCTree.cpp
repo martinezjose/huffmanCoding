@@ -19,7 +19,7 @@ void clear(HCNode* node) {
 }
 
 /** Helper method to traverse from a leaf to the root. **/
-void traverseToRoot(HCNode* node, ofstream& out) {
+void traverseToRoot(HCNode* node, BitOutputStream& out) {
 
   if (node == nullptr) {
     return;
@@ -102,14 +102,13 @@ void HCTree::build(const vector<int>& freqs) {
   }
 }
 
-/** Write to the given ofstream
- *  the sequence of bits (as ASCII) coding the given symbol.
+/** Write to the given BitOutputStream
+ *  the sequence of bits coding the given symbol.
  *  PRECONDITION: build() has been called, to create the coding
  *  tree, and initialize root pointer and leaves vector.
- *  THIS METHOD IS USEFUL FOR THE CHECKPOINT BUT SHOULD NOT
- *  BE USED IN THE FINAL SUBMISSION.
  */
-void HCTree::encode(byte symbol, ofstream& out) const {
+
+void HCTree::encode(byte symbol, BitOutputStream& out) const {
   traverseToRoot(leaves[symbol], out);
 }
 
