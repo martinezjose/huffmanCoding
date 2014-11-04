@@ -8,16 +8,18 @@
  */
 void writeBit(int bit) {
 
-  if( buf.all() ){
+  // If bufi is 8, then buffer is full
+  if( bufi == 8 ){
     flush();
   }
 
+  // bit will always be 0 or 1
   buf[bufi] = bit;
   bufi++:
 
 }
 
-/** TODO
+/** NOT NEEDED RIGHT NOW
  *  Write the least significant byte of the argument to the ostream.
  *  This function doesn't touch the bit buffer.
  *  The client has to manage interaction between writing bits
@@ -26,13 +28,17 @@ void writeBit(int bit) {
 void writeByte(int b) {
 }
 
-/** TODO
+/** DONE 
  *  Write the argument to the ostream.
  *  This function doesn't touch the bit buffer.
  *  The client has to manage interaction between writing bits
  *  and writing ints.
  */
 void writeInt(int i) {
+
+  // a simple write with the passed int
+  out.write((char*)&i, sizeof(i)); 
+
 }
 
 /** DONE

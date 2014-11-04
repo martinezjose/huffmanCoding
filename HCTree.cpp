@@ -34,10 +34,10 @@ void traverseToRoot(HCNode* node, ofstream& out) {
     /** If the node it's the left child of the parent **/
     if (node->p->c0 == node) {
       /** Write 0 **/
-      out.put('0');
+      out.writeBit(0);
     } else {
       /** Write 1 **/
-      out.put('1');
+      out.writeBit(1);
     }
   }
 }

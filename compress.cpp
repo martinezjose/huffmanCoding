@@ -94,14 +94,18 @@ int main(int argc, char** argv) {
   inFile.clear();
   inFile.seekg(0, ios::beg);
   cout << "Writing to file \"" << argv[2] << "\"... ";
+
+  /** create BitOutputStream object **/
+  BitOutputStream outStream(outFile);
+
   while (1) {
     /** Read character **/
     symbol = inFile.get();
     if (inFile.eof()) {
       break;
     }
-    /** Encode character to the output file **/
-    tree.encode(symbol, outFile);
+    /** Encode character to the output file, using BitOutputStream class **/
+    tree.encode(symbol, outStream);
   }
   cout << "done." << endl;
 
