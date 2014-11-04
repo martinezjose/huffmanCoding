@@ -1,6 +1,6 @@
 #ifdef BITINPUTSTREAM_HPP
 
-/** TODO
+/** DOING
  *  Read the next bit from the bit buffer.
  *  If the bit buffer is currently empty,
  *  fill the bit buffer by reading a char from the istream first.
@@ -10,6 +10,7 @@
  *  of ordering of bits in the stream.
  */
 int readBit() {
+  
   return 0;
 }
 

@@ -11,8 +11,8 @@ private:
   /** The ostream to delegate to. **/
   ostream& out;
   /** The buffer of bits. **/
-  char buf;
-  /** TODO bitset<8> buf; **/
+  //char buf;
+  bitset<8> buf;
   /** The bit buffer index. **/
   int bufi;
 
