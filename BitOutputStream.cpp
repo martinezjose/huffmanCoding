@@ -8,17 +8,16 @@
  */
 void BitOutputStream::writeBit(int bit) {
 
-  // get the least significant bit (0 or 1)
-  buf = bit & 1;
-
   // If bufi is 8, then buffer is full
   if( bufi == 8 ) {
     flush();
   } 
 
-  // shift lsb to the left 7-bufi places 
-  // then you OR the lsb with 1 
-  buf |= 1 << (7-bufi);
+  if (bit == 1) {
+    // shift lsb to the left 7-bufi places 
+    // then you OR the lsb with 1 
+    buf |= 1 << (7-bufi);
+  }
 
   // increase index
   bufi++;
