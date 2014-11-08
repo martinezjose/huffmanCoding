@@ -41,8 +41,13 @@ int main(int argc, char** argv) {
   /** Check for errors **/
   if (outFile.fail()) {
     cerr << "Error opening output file: " << strerror(errno) << "." << endl;
+    inFile.close();
     return -1;
   }
+
+  /** Declare BitInputStream and BitOutputStream objects object **/
+  BitOutputStream outStream = BitOutputStream(outFile);
+  BitInputStream inStream = BitInputStream(inFile);
 
   /** Create tree **/
   HCTree tree = HCTree();
@@ -57,7 +62,7 @@ int main(int argc, char** argv) {
   /** Get frequencies **/
   while (1) {
     /** Read character **/
-    symbol = inFile.get();
+    symbol = inStream.readByte();
     if (inFile.eof()) {
       break;
     }
@@ -81,7 +86,7 @@ int main(int argc, char** argv) {
       totalSymbols++;
       totalCount += freqs[i];
     }
-    outFile << freqs[i] << endl;
+    outStream.writeInt(freqs[i]);
   }
   cout << "done." << endl;
 
@@ -96,13 +101,14 @@ int main(int argc, char** argv) {
   cout << "Writing to file \"" << argv[2] << "\"... ";
   while (1) {
     /** Read character **/
-    symbol = inFile.get();
+    symbol = inStream.readByte();
     if (inFile.eof()) {
       break;
     }
     /** Encode character to the output file **/
-    tree.encode(symbol, outFile);
+    tree.encode(symbol, outStream);
   }
+  outStream.flush();
   cout << "done." << endl;
 
   /** Close both file streams **/

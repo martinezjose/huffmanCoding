@@ -19,6 +19,30 @@ void clear(HCNode* node) {
 }
 
 /** Helper method to traverse from a leaf to the root. **/
+void traverseToRoot(HCNode* node, BitOutputStream& out) {
+
+  if (node == nullptr) {
+    return;
+  }
+
+  /** Go to the parent **/
+  traverseToRoot(node->p, out);
+
+  /** If we aren't on the root **/
+  if (node->p != nullptr) {
+
+    /** If the node it's the left child of the parent **/
+    if (node->p->c0 == node) {
+      /** Write 0 **/
+      out.writeBit(0);
+    } else {
+      /** Write 1 **/
+      out.writeBit(1);
+    }
+  }
+}
+
+/** Helper method to traverse from a leaf to the root. **/
 void traverseToRoot(HCNode* node, ofstream& out) {
 
   if (node == nullptr) {
@@ -26,7 +50,7 @@ void traverseToRoot(HCNode* node, ofstream& out) {
   }
 
   /** Go to the parent **/
-  traverseToRoot(node->p,out);
+  traverseToRoot(node->p, out);
 
   /** If we aren't on the root **/
   if (node->p != nullptr) {
@@ -86,7 +110,7 @@ void HCTree::build(const vector<int>& freqs) {
     forest.pop();
 
     /** Combine these two trees into a new tree (summing their counts) **/
-    HCNode* p = new HCNode(c0->count+c1->count, c0->symbol, c0, c1);
+    HCNode* p = new HCNode(c0->count + c1->count, c0->symbol, c0, c1);
 
     /** Set parent **/
     c0->p = p;
@@ -113,6 +137,14 @@ void HCTree::encode(byte symbol, ofstream& out) const {
   traverseToRoot(leaves[symbol], out);
 }
 
+/** Write to the given BitOutputStream
+ *  the sequence of bits coding the given symbol.
+ *  PRECONDITION: build() has been called, to create the coding
+ *  tree, and initialize root pointer and leaves vector.
+ */
+void HCTree::encode(byte symbol, BitOutputStream& out) const {
+  traverseToRoot(leaves[symbol], out);
+}
 
 /** Return the symbol coded in the next sequence of bits (represented as
  *  ASCII text) from the ifstream.
@@ -137,7 +169,7 @@ int HCTree::decode(ifstream& in) const {
     /** Get symbol from file **/
     int symbol = in.get();
 
-    /** If b is -1, return as stopping condition**/
+    /** If symbol is -1, return as stopping condition**/
     if (symbol == -1) {
       /** If we were trying to read for the first time **/
       if (root == node) {
@@ -152,6 +184,46 @@ int HCTree::decode(ifstream& in) const {
 
       /** If we get a 1, go right **/
     } else if (symbol == 49) {
+      node = node->c1;
+    }
+  }
+  return node->symbol;
+}
+
+/** Return symbol coded in the next sequence of bits from the stream.
+ *  PRECONDITION: build() has been called, to create the coding
+ *  tree, and initialize root pointer and leaves vector.
+ */
+int HCTree::decode(BitInputStream& in) const {
+
+  /** If root is null, return stopping condition **/
+  if (root == nullptr) {
+    return -1;
+  }
+
+  /** Get root **/
+  HCNode* node = root;
+
+  /** Loop while we haven't reached a leaf **/
+  while (node->c0 != nullptr || node->c1 != nullptr) {
+
+    /** Get symbol from file **/
+    int bit = in.readBit();
+
+    /** If bit is -1, return as stopping condition**/
+    if (bit == -1) {
+      /** If we were trying to read for the first time **/
+      if (node == root) {
+        return -2;
+      }
+      return bit;
+    }
+    /** If we get a 0, go left **/
+    if (bit == 0) {
+      node = node->c0;
+
+      /** If we get a 1, go right **/
+    } else if (bit == 1) {
       node = node->c1;
     }
   }
