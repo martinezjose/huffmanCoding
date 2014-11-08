@@ -41,8 +41,13 @@ int main(int argc, char** argv) {
   /** Check for errors **/
   if (outFile.fail()) {
     cerr << "Error opening output file: " << strerror(errno) << "." << endl;
+    inFile.close();
     return -1;
   }
+
+  /** Declare BitInputStream and BitOutputStream objects object **/
+  BitOutputStream outStream = BitOutputStream(outFile);
+  BitInputStream inStream = BitInputStream(inFile);
 
   /** Create tree **/
   HCTree tree = HCTree();
@@ -56,7 +61,7 @@ int main(int argc, char** argv) {
   int uniqueSymbols = 0;
   cout << "Reading header from file \"" << argv[1] << "\"... ";
   for (uint i = 0; i < freqs.size(); i++) {
-    inFile >> frequency;
+    frequency = inStream.readInt();
     /** If we are at the end of the file **/
     if (inFile.eof()) {
       cout << "Error reading header in input file: Reached EOF." << endl;
@@ -84,7 +89,7 @@ int main(int argc, char** argv) {
   cout << "Writing to file \"" << argv[2] << "\"... ";
   while (frequenciesTotal > 0) {
     /** Decode next symbol in file **/
-    int symbol = tree.decode(inFile);
+    int symbol = tree.decode(inStream);
 
     /** If we are at the end of the file or we got the stopping condition **/
     if (symbol == -1) {
@@ -95,7 +100,7 @@ int main(int argc, char** argv) {
     }
 
     /** Write to output **/
-    outFile.put(symbol);
+    outStream.writeByte(symbol);
 
     /** Decrement frequencies **/
     frequenciesTotal--;

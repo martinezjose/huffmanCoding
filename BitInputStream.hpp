@@ -4,6 +4,8 @@
 #include <iostream>
 #include <bitset>
 
+using namespace std;
+
 /** A class for reading bits (and ints) from an istream. **/
 class BitInputStream {
 
@@ -12,14 +14,12 @@ private:
   istream& in;
   /** The buffer of bits. **/
   char buf;
-  /** TODO bitset<8> buf; **/
   /** The bit buffer index. **/
   int bufi;
 
 public:
   /** Initialize a BitInputStream object, given an istream. **/
   BitInputStream(istream& s) : in(s), buf(0), bufi(8) { }
-  /** TODO BitInputStream(istream& s) : in(s), bufi(8) { } **/
 
   /** Read the next bit from the bit buffer.
    *  If the bit buffer is currently empty,
@@ -46,6 +46,9 @@ public:
    *  and reading ints.
    */
   int readInt();
+
+  /** Fill the buffer from the input. **/
+  void fill();
 };
 
 #endif /** BITINPUTSTREAM_HPP **/
