@@ -9,11 +9,13 @@ Huffman code compression is used today as part of JPEG image compression, the MP
   2. Files should not contain tabs, or trailing whitespace.
   3. The identation should be 2 spaces.
   4. Every code block should be wrapped by braces:
-    ```if (condition) {
+    ```
+    if (condition) {
       /** Code here **/
     } else {
       /** More code here **/
-    }```
+    }
+    ```
 
     Notice the spaces between if and the opening parenthesis and the space
     after the closing parenthesis. Also notice the spaces between the word else.
